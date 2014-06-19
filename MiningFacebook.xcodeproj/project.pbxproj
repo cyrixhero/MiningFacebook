@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		302A50821953466800B7E215 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 302A50811953466800B7E215 /* main.swift */; };
+		302A508B195346B500B7E215 /* AccessToken.swift in Sources */ = {isa = PBXBuildFile; fileRef = 302A5088195346B500B7E215 /* AccessToken.swift */; };
+		302A508C195346B500B7E215 /* input.swift in Sources */ = {isa = PBXBuildFile; fileRef = 302A5089195346B500B7E215 /* input.swift */; };
+		302A508D195346B500B7E215 /* OpenTake.swift in Sources */ = {isa = PBXBuildFile; fileRef = 302A508A195346B500B7E215 /* OpenTake.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -25,6 +28,9 @@
 /* Begin PBXFileReference section */
 		302A507E1953466800B7E215 /* MiningFacebook */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = MiningFacebook; sourceTree = BUILT_PRODUCTS_DIR; };
 		302A50811953466800B7E215 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		302A5088195346B500B7E215 /* AccessToken.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccessToken.swift; sourceTree = "<group>"; };
+		302A5089195346B500B7E215 /* input.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = input.swift; sourceTree = "<group>"; };
+		302A508A195346B500B7E215 /* OpenTake.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OpenTake.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,6 +63,9 @@
 		302A50801953466800B7E215 /* MiningFacebook */ = {
 			isa = PBXGroup;
 			children = (
+				302A5088195346B500B7E215 /* AccessToken.swift */,
+				302A5089195346B500B7E215 /* input.swift */,
+				302A508A195346B500B7E215 /* OpenTake.swift */,
 				302A50811953466800B7E215 /* main.swift */,
 			);
 			path = MiningFacebook;
@@ -118,7 +127,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				302A508D195346B500B7E215 /* OpenTake.swift in Sources */,
 				302A50821953466800B7E215 /* main.swift in Sources */,
+				302A508C195346B500B7E215 /* input.swift in Sources */,
+				302A508B195346B500B7E215 /* AccessToken.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -233,6 +245,7 @@
 				302A50871953466800B7E215 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

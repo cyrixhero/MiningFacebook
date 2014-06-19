@@ -1,12 +1,15 @@
-//
-//  main.swift
-//  MiningFacebook
-//
-//  Created by 湛昆峰 on 2014/6/20.
-//  Copyright (c) 2014年 湛昆峰. All rights reserved.
-//
+// MiningFacebook for command line tool
 
 import Foundation
 
-println("Hello, World!")
+println("Select: 1.OpenTake 2.AccessToken")
+var select = input()
 
+switch select {
+case "1":
+    OpenTake()
+case "2":
+    AccessToken()
+default:
+    println("Nothing!")
+}
