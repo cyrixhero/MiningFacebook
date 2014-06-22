@@ -3,7 +3,16 @@ import Foundation
 func MiningPost() {
     println("AccessToken: ")
     var AccessToken = input()
-    var terminate: String
+    
+    var request: NSURLRequest
+    var response: NSData
+    var JSONData: NSDictionary
+    var FacebookUID: NSArray
+    var outputFile: NSMutableString = ""
+    var getNextFlag: NSDictionary
+    var nextFlag: NSArray
+    var FileName: String
+    var terminate: String    
 
     do {
         println("{Post-ID}: ")
@@ -13,15 +22,6 @@ func MiningPost() {
         var url_Likes: NSURL
         var urlPath_SharedPosts = "https://graph.facebook.com/" + PostID + "/sharedposts?limit=1000&access_token=" + AccessToken
         var url_SharedPosts: NSURL
-
-        var request: NSURLRequest
-        var response: NSData
-        var JSONData: NSDictionary
-        var FacebookUID: NSArray
-        var outputFile: NSMutableString = ""
-        var getNextFlag: NSDictionary
-        var nextFlag: NSArray
-        var FileName: String
         
         do {
             url_Likes = NSURL(string: urlPath_Likes)
@@ -65,12 +65,12 @@ func MiningPost() {
             }
         } while nextFlag[1] as NSString == "next" || nextFlag[2] as NSString == "next"
         
-        println(outputFile)
-        println("Output file name: ")
-        FileName = input()
-        outputFile.writeToFile("/Users/cyrix/Desktop/" + FileName + ".csv", atomically:true)
-
         println("Exit?")
         terminate = input()
     } while terminate == "n"
+
+    println(outputFile)
+    println("Output file name: ")
+    FileName = input()
+    outputFile.writeToFile("/Users/cyrix/Desktop/" + FileName + ".csv", atomically:true)
 }
