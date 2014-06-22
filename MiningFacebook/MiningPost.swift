@@ -27,7 +27,8 @@ func MiningPost() {
             url_Likes = NSURL(string: urlPath_Likes)
             request = NSURLRequest(URL: url_Likes)
             response = NSURLConnection.sendSynchronousRequest(request, returningResponse: nil, error: nil)
-            JSONData = NSJSONSerialization.JSONObjectWithData(response, options: NSJSONReadingOptions.MutableContainers, error: nil) as NSDictionary
+//            JSONData = NSJSONSerialization.JSONObjectWithData(response, options: NSJSONReadingOptions.MutableContainers, error: nil) as NSDictionary
+            JSONData = AnalyticsJSON(response)
             FacebookUID = JSONData["data"].valueForKey("id") as NSArray
             
             for var i = 0; i < FacebookUID.count; ++i {
