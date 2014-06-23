@@ -3,9 +3,11 @@ import Foundation
 func MiningPost() {
     println("AccessToken: ")
     var AccessToken = input()
-    
-    var request: NSURLRequest
-    var response: NSData
+
+    var url_Likes: NSURL
+    var url_SharedPosts: NSURL
+    var URLRequest: NSURLRequest
+    var DataResponse: NSData
     var JSONData: NSDictionary
     var FacebookUID: NSArray
     var outputFile: NSMutableString = ""
@@ -17,18 +19,15 @@ func MiningPost() {
     do {
         println("{Post-ID}: ")
         var PostID = input()
-        
-        var urlPath_Likes = "https://graph.facebook.com/" + PostID + "/likes?limit=1000&access_token=" + AccessToken
-        var url_Likes: NSURL
-        var urlPath_SharedPosts = "https://graph.facebook.com/" + PostID + "/sharedposts?limit=1000&access_token=" + AccessToken
-        var url_SharedPosts: NSURL
+        var AccessType = get_urlPath(PostID, AccessToken)
+        var urlPath_Likes = AccessType.urlPath_Likes
+        var urlPath_SharedPosts = AccessType.urlPath_SharedPosts
         
         do {
             url_Likes = NSURL(string: urlPath_Likes)
-            request = NSURLRequest(URL: url_Likes)
-            response = NSURLConnection.sendSynchronousRequest(request, returningResponse: nil, error: nil)
-//            JSONData = NSJSONSerialization.JSONObjectWithData(response, options: NSJSONReadingOptions.MutableContainers, error: nil) as NSDictionary
-            JSONData = AnalyticsJSON(response)
+            URLRequest = NSURLRequest(URL: url_Likes)
+            DataResponse = NSURLConnection.sendSynchronousRequest(URLRequest, returningResponse: nil, error: nil)
+            JSONData = NSJSONSerialization.JSONObjectWithData(DataResponse, options: NSJSONReadingOptions.MutableContainers, error: nil) as NSDictionary
             FacebookUID = JSONData["data"].valueForKey("id") as NSArray
             
             for var i = 0; i < FacebookUID.count; ++i {
@@ -47,9 +46,9 @@ func MiningPost() {
 
         do {
             url_SharedPosts = NSURL(string: urlPath_SharedPosts)
-            request = NSURLRequest(URL: url_SharedPosts)
-            response = NSURLConnection.sendSynchronousRequest(request, returningResponse: nil, error: nil)
-            JSONData = NSJSONSerialization.JSONObjectWithData(response, options: NSJSONReadingOptions.MutableContainers, error: nil) as NSDictionary
+            URLRequest = NSURLRequest(URL: url_SharedPosts)
+            DataResponse = NSURLConnection.sendSynchronousRequest(URLRequest, returningResponse: nil, error: nil)
+            JSONData = NSJSONSerialization.JSONObjectWithData(DataResponse, options: NSJSONReadingOptions.MutableContainers, error: nil) as NSDictionary
             FacebookUID = JSONData["data"].valueForKey("from") as NSArray
         
             for var i = 0; i < FacebookUID.count; ++i {
