@@ -2,5 +2,5 @@
 
 import Foundation
 
-println("Welcome Mining Facebook!\n")
+println("\nWelcome Mining Facebook!\n")
 MiningPost()

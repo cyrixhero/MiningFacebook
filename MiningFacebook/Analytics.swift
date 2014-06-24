@@ -6,27 +6,69 @@ func input() -> String {
     return NSString(data: inputData, encoding:NSUTF8StringEncoding).stringByReplacingOccurrencesOfString("\n", withString:"")
 }
 
-func get_urlPath(getPostID: String, getAccessToken: String
+func get_urlPath(PostID: String, AccessToken: String
     ) -> (urlPath_Likes: String, urlPath_SharedPosts: String) {
-    var urlPath_Likes = "https://graph.facebook.com/" + getPostID + "/likes?limit=1000&access_token=" + getAccessToken
-    var urlPath_SharedPosts = "https://graph.facebook.com/" + getPostID + "/sharedposts?limit=1000&access_token=" + getAccessToken
+    var urlPath_Likes = "https://graph.facebook.com/" + PostID + "/likes?limit=1000&access_token=" + AccessToken
+    var urlPath_SharedPosts = "https://graph.facebook.com/" + PostID + "/sharedposts?limit=1000&access_token=" + AccessToken
     return (urlPath_Likes, urlPath_SharedPosts)
 }
 
-func AnalyticsJSON_Likes(getURLPath_Likes: String) -> (JSONData_Likes: NSDictionary) {
-    var url_Likes: NSURL = NSURL(string: getURLPath_Likes)
+func AnalyticsJSON_Likes(URLPath_Likes: String) -> (storeUID_Likes: NSMutableString, FacebookUID_Flag: Int, nextFlag: NSArray, NextURLPath_Likes: String) {
+    var url_Likes: NSURL = NSURL(string: URLPath_Likes)
     var URLRequest: NSURLRequest = NSURLRequest(URL: url_Likes)
     var DataResponse: NSData = NSURLConnection.sendSynchronousRequest(URLRequest, returningResponse: nil, error: nil)
     var JSONData_Likes = NSJSONSerialization.JSONObjectWithData(DataResponse, options: NSJSONReadingOptions.MutableContainers, error: nil) as NSDictionary
+    var FacebookUID_Likes = JSONData_Likes["data"].valueForKey("id") as NSArray
+    var storeUID_Likes: NSMutableString = ""
+    var FacebookUID_Flag = FacebookUID_Likes.count
+    var getNextFlag: NSDictionary
+    var nextFlag: NSArray = []
+    var NextURLPath_Likes: String = ""
 
-    return JSONData_Likes
+    for var i = 0; i < FacebookUID_Likes.count; ++i {
+        storeUID_Likes.appendFormat("%@\n", FacebookUID_Likes.objectAtIndex(i).stringByStandardizingPath)
+    }
+
+    if FacebookUID_Likes.count == 1000 {
+        getNextFlag = JSONData_Likes["paging"] as NSDictionary
+        nextFlag = getNextFlag.allKeys
+        if nextFlag[1] as NSString == "next" || nextFlag[2] as NSString == "next" {
+            NextURLPath_Likes = JSONData_Likes["paging"].valueForKey("next").stringByStandardizingPath
+        }
+    }
+
+    return (storeUID_Likes, FacebookUID_Flag, nextFlag, NextURLPath_Likes)
 }
 
-func AnalyticsJSON_SharedPosts(getURLPath_SharedPosts: String) -> (JSONData_SharedPosts: NSDictionary) {
-    var url_SharedPosts: NSURL = NSURL(string: getURLPath_SharedPosts)
+func AnalyticsJSON_SharedPosts(URLPath_SharedPosts: String) -> (storeUID_SharedPosts: NSMutableString, FacebookUID_Flag: Int, nextFlag: NSArray, NextURLPath_SharedPosts: String) {
+    var url_SharedPosts: NSURL = NSURL(string: URLPath_SharedPosts)
     var URLRequest: NSURLRequest = NSURLRequest(URL: url_SharedPosts)
     var DataResponse: NSData = NSURLConnection.sendSynchronousRequest(URLRequest, returningResponse: nil, error: nil)
     var JSONData_SharedPosts = NSJSONSerialization.JSONObjectWithData(DataResponse, options: NSJSONReadingOptions.MutableContainers, error: nil) as NSDictionary
+    var FacebookUID_SharedPosts = JSONData_SharedPosts["data"].valueForKey("from") as NSArray
+    var storeUID_SharedPosts: NSMutableString = ""
+    var FacebookUID_Flag = FacebookUID_SharedPosts.count
+    var getNextFlag: NSDictionary
+    var nextFlag: NSArray = []
+    var NextURLPath_SharedPosts: String = ""
     
-    return JSONData_SharedPosts
+    for var i = 0; i < FacebookUID_SharedPosts.count; ++i {
+        storeUID_SharedPosts.appendFormat("%@\n", FacebookUID_SharedPosts.objectAtIndex(i).valueForKey("id").stringByStandardizingPath)
+    }
+    
+    if FacebookUID_SharedPosts.count == 1000 {
+        getNextFlag = JSONData_SharedPosts["paging"] as NSDictionary
+        nextFlag = getNextFlag.allKeys
+        if nextFlag[1] as NSString == "next" || nextFlag[2] as NSString == "next" {
+            NextURLPath_SharedPosts = JSONData_SharedPosts["paging"].valueForKey("next").stringByStandardizingPath
+        }
+    }
+    
+    return (storeUID_SharedPosts, FacebookUID_Flag, nextFlag, NextURLPath_SharedPosts)
+}
+
+func SaveToFile(outputFile: NSMutableString) {
+    println(outputFile)
+    outputFile.writeToFile("/Users/cyrix/Desktop/uid.csv", atomically:true)
+    println("Enjoy!")
 }
