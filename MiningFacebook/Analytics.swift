@@ -69,6 +69,6 @@ func AnalyticsJSON_SharedPosts(URLPath_SharedPosts: String) -> (storeUID_SharedP
 
 func SaveToFile(outputFile: NSMutableString) {
     println(outputFile)
-    outputFile.writeToFile("/Users/cyrix/Desktop/uid.csv", atomically:true)
+    outputFile.writeToFile("/Users/cyrix/Desktop/uid.csv", atomically: true, encoding: NSUTF8StringEncoding, error: nil)
     println("Enjoy!")
 }
