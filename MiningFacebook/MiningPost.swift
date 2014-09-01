@@ -48,7 +48,7 @@ func MiningPost() {
                 outputFile.appendFormat(AnalyticsData.storeUID_SharedPosts)
                 FacebookUID = AnalyticsData.FacebookUID_Flag
                 
-                if FacebookUID < 1000 {
+                if FacebookUID < 900 {
                     break
                 }else {
                     nextFlag = AnalyticsData.nextFlag
@@ -85,7 +85,7 @@ func MiningPost() {
                 outputFile.appendFormat(AnalyticsData.storeUID_SharedPosts)
                 FacebookUID = AnalyticsData.FacebookUID_Flag
                 
-                if FacebookUID < 1000 {
+                if FacebookUID < 900 {
                     break
                 }else {
                     nextFlag = AnalyticsData.nextFlag
