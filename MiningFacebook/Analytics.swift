@@ -9,7 +9,7 @@ func input() -> String {
 func get_urlPath(PostID: String, AccessToken: String
     ) -> (urlPath_Likes: String, urlPath_SharedPosts: String) {
     var urlPath_Likes = "https://graph.facebook.com/" + PostID + "/likes?limit=1000&access_token=" + AccessToken
-    var urlPath_SharedPosts = "https://graph.facebook.com/" + PostID + "/sharedposts?limit=900&access_token=" + AccessToken
+    var urlPath_SharedPosts = "https://graph.facebook.com/" + PostID + "/sharedposts?limit=500&access_token=" + AccessToken
     return (urlPath_Likes, urlPath_SharedPosts)
 }
 
@@ -56,7 +56,7 @@ func AnalyticsJSON_SharedPosts(URLPath_SharedPosts: String) -> (storeUID_SharedP
         storeUID_SharedPosts.appendFormat("%@\n", FacebookUID_SharedPosts.objectAtIndex(i).valueForKey("id").stringByStandardizingPath)
     }
     
-    if FacebookUID_SharedPosts.count == 900 {
+    if FacebookUID_SharedPosts.count == 500 {
         getNextFlag = JSONData_SharedPosts["paging"] as NSDictionary
         nextFlag = getNextFlag.allKeys
         if nextFlag[1] as NSString == "next" || nextFlag[2] as NSString == "next" {
