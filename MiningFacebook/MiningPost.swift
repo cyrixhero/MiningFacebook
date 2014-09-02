@@ -9,7 +9,10 @@ func MiningPost() {
     var nextFlag: NSArray
     var terminate: String
     
-    println("\nWhich mode do you want? (1.Likes 2.Shared 3.LikeShared)")
+    println("\nWhich mode do you want?")
+    println("1.Likes")
+    println("2.Shared")
+    println("3.LikeShared")
     var mode = input()
     
     switch mode {
@@ -47,14 +50,14 @@ func MiningPost() {
                 var AnalyticsData = AnalyticsJSON_SharedPosts(urlPath_SharedPosts)
                 outputFile.appendFormat(AnalyticsData.storeUID_SharedPosts)
                 FacebookUID = AnalyticsData.FacebookUID_Flag
-                
-                if FacebookUID < 500 {
+                nextFlag = AnalyticsData.nextFlag
+
+                if nextFlag.count == 1 {
                     break
                 }else {
-                    nextFlag = AnalyticsData.nextFlag
                     urlPath_SharedPosts = AnalyticsData.NextURLPath_SharedPosts
                 }
-            } while nextFlag[1] as NSString == "next" || nextFlag[2] as NSString == "next"
+            } while nextFlag[0] as NSString == "cursors" && nextFlag[1] as NSString == "next" || nextFlag.count == 3
             
             println("Exit? (You are in Shared mode now)")
             terminate = input()
@@ -84,14 +87,14 @@ func MiningPost() {
                 var AnalyticsData = AnalyticsJSON_SharedPosts(urlPath_SharedPosts)
                 outputFile.appendFormat(AnalyticsData.storeUID_SharedPosts)
                 FacebookUID = AnalyticsData.FacebookUID_Flag
+                nextFlag = AnalyticsData.nextFlag
                 
-                if FacebookUID < 500 {
+                if nextFlag.count == 1 {
                     break
                 }else {
-                    nextFlag = AnalyticsData.nextFlag
                     urlPath_SharedPosts = AnalyticsData.NextURLPath_SharedPosts
                 }
-            } while nextFlag[1] as NSString == "next" || nextFlag[2] as NSString == "next"
+            } while nextFlag[0] as NSString == "cursors" && nextFlag[1] as NSString == "next" || nextFlag.count == 3
             
             println("Exit? (You are in LikeShared mode now)")
             terminate = input()

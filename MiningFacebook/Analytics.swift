@@ -51,17 +51,35 @@ func AnalyticsJSON_SharedPosts(URLPath_SharedPosts: String) -> (storeUID_SharedP
     var getNextFlag: NSDictionary
     var nextFlag: NSArray = []
     var NextURLPath_SharedPosts: String = ""
+    var flag = 0
     
     for var i = 0; i < FacebookUID_SharedPosts.count; ++i {
         storeUID_SharedPosts.appendFormat("%@\n", FacebookUID_SharedPosts.objectAtIndex(i).valueForKey("id").stringByStandardizingPath)
     }
     
-    if FacebookUID_SharedPosts.count == 500 {
-        getNextFlag = JSONData_SharedPosts["paging"] as NSDictionary
-        nextFlag = getNextFlag.allKeys
-        if nextFlag[1] as NSString == "next" || nextFlag[2] as NSString == "next" {
-            NextURLPath_SharedPosts = JSONData_SharedPosts["paging"].valueForKey("next").stringByStandardizingPath
-        }
+    getNextFlag = JSONData_SharedPosts["paging"] as NSDictionary
+    nextFlag = getNextFlag.allKeys
+    if nextFlag.count == 1 {
+        flag = 4
+    }else if nextFlag[0] as NSString == "cursors" && nextFlag[1] as NSString == "next" {
+        flag = 1
+    }else if nextFlag.count == 3 {
+        flag = 2
+    }else if nextFlag[0] as NSString == "cursors" && nextFlag[1] as NSString == "previous" {
+        flag = 3
+    }
+
+    switch flag {
+    case 1:
+        NextURLPath_SharedPosts = JSONData_SharedPosts["paging"].valueForKey("next").stringByStandardizingPath
+    case 2:
+        NextURLPath_SharedPosts = JSONData_SharedPosts["paging"].valueForKey("next").stringByStandardizingPath
+    case 3:
+        break
+    case 4:
+        break
+    default:
+        break
     }
     
     return (storeUID_SharedPosts, FacebookUID_Flag, nextFlag, NextURLPath_SharedPosts)
