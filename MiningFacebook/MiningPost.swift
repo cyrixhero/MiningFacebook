@@ -10,7 +10,7 @@ func MiningPost() {
     var terminate: String
     
     println("\nWhich mode do you want?")
-    println("1.Likes")
+    println("1.Likes, CommentLike")
     println("2.Shared")
     println("3.LikeShared")
     var mode = input()
