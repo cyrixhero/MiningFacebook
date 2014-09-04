@@ -12,7 +12,9 @@ func MiningPost() {
     println("\nWhich mode do you want?")
     println("1.Likes, CommentLike")
     println("2.Shared")
-    println("3.LikeShared")
+    println("3.Comments, SubComments")
+    println("4.LikeShared")
+    println("5.LikeSharedComment")
     var mode = input()
     
     switch mode {
@@ -67,6 +69,29 @@ func MiningPost() {
             println("{Post-ID}: ")
             var PostID = input()
             var AccessType = get_urlPath(PostID, AccessToken)
+            var urlPath_Comments = AccessType.urlPath_Comments
+            
+            do {
+                var AnalyticsData = AnalyticsJSON_Comments(urlPath_Comments)
+                outputFile.appendFormat(AnalyticsData.storeUID_Comments)
+                FacebookUID = AnalyticsData.FacebookUID_Flag
+                nextFlag = AnalyticsData.nextFlag
+                
+                if nextFlag.count == 1 {
+                    break
+                }else {
+                    urlPath_Comments = AnalyticsData.NextURLPath_Comments
+                }
+            } while nextFlag[0] as NSString == "cursors" && nextFlag[1] as NSString == "next" || nextFlag.count == 3
+            
+            println("Exit? (You are in Comments mode now)")
+            terminate = input()
+        } while terminate == "n"
+    case "4":
+        do {
+            println("{Post-ID}: ")
+            var PostID = input()
+            var AccessType = get_urlPath(PostID, AccessToken)
             var urlPath_Likes = AccessType.urlPath_Likes
             var urlPath_SharedPosts = AccessType.urlPath_SharedPosts
 
@@ -97,6 +122,57 @@ func MiningPost() {
             } while nextFlag[0] as NSString == "cursors" && nextFlag[1] as NSString == "next" || nextFlag.count == 3
             
             println("Exit? (You are in LikeShared mode now)")
+            terminate = input()
+        } while terminate == "n"
+    case "5":
+        do {
+            println("{Post-ID}: ")
+            var PostID = input()
+            var AccessType = get_urlPath(PostID, AccessToken)
+            var urlPath_Likes = AccessType.urlPath_Likes
+            var urlPath_SharedPosts = AccessType.urlPath_SharedPosts
+            var urlPath_Comments = AccessType.urlPath_Comments
+            
+            do {
+                var AnalyticsData = AnalyticsJSON_Likes(urlPath_Likes)
+                outputFile.appendFormat(AnalyticsData.storeUID_Likes)
+                FacebookUID = AnalyticsData.FacebookUID_Flag
+                
+                if FacebookUID < 1000 {
+                    break
+                }else {
+                    nextFlag = AnalyticsData.nextFlag
+                    urlPath_Likes = AnalyticsData.NextURLPath_Likes
+                }
+            } while nextFlag[1] as NSString == "next" || nextFlag[2] as NSString == "next"
+            
+            do {
+                var AnalyticsData = AnalyticsJSON_SharedPosts(urlPath_SharedPosts)
+                outputFile.appendFormat(AnalyticsData.storeUID_SharedPosts)
+                FacebookUID = AnalyticsData.FacebookUID_Flag
+                nextFlag = AnalyticsData.nextFlag
+                
+                if nextFlag.count == 1 {
+                    break
+                }else {
+                    urlPath_SharedPosts = AnalyticsData.NextURLPath_SharedPosts
+                }
+            } while nextFlag[0] as NSString == "cursors" && nextFlag[1] as NSString == "next" || nextFlag.count == 3
+            
+            do {
+                var AnalyticsData = AnalyticsJSON_Comments(urlPath_Comments)
+                outputFile.appendFormat(AnalyticsData.storeUID_Comments)
+                FacebookUID = AnalyticsData.FacebookUID_Flag
+                nextFlag = AnalyticsData.nextFlag
+                
+                if nextFlag.count == 1 {
+                    break
+                }else {
+                    urlPath_Comments = AnalyticsData.NextURLPath_Comments
+                }
+            } while nextFlag[0] as NSString == "cursors" && nextFlag[1] as NSString == "next" || nextFlag.count == 3
+            
+            println("Exit? (You are in LikeSharedComment mode now)")
             terminate = input()
         } while terminate == "n"
     default:

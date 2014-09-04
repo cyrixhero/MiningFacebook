@@ -7,10 +7,11 @@ func input() -> String {
 }
 
 func get_urlPath(PostID: String, AccessToken: String
-    ) -> (urlPath_Likes: String, urlPath_SharedPosts: String) {
+    ) -> (urlPath_Likes: String, urlPath_SharedPosts: String, urlPath_Comments: String) {
     var urlPath_Likes = "https://graph.facebook.com/" + PostID + "/likes?limit=1000&access_token=" + AccessToken
     var urlPath_SharedPosts = "https://graph.facebook.com/" + PostID + "/sharedposts?limit=500&access_token=" + AccessToken
-    return (urlPath_Likes, urlPath_SharedPosts)
+    var urlPath_Comments = "https://graph.facebook.com/" + PostID + "/comments?limit=500&access_token=" + AccessToken
+    return (urlPath_Likes, urlPath_SharedPosts, urlPath_Comments)
 }
 
 func AnalyticsJSON_Likes(URLPath_Likes: String) -> (storeUID_Likes: NSMutableString, FacebookUID_Flag: Int, nextFlag: NSArray, NextURLPath_Likes: String) {
@@ -83,6 +84,51 @@ func AnalyticsJSON_SharedPosts(URLPath_SharedPosts: String) -> (storeUID_SharedP
     }
     
     return (storeUID_SharedPosts, FacebookUID_Flag, nextFlag, NextURLPath_SharedPosts)
+}
+
+func AnalyticsJSON_Comments(URLPath_Comments: String) -> (storeUID_Comments: NSMutableString, FacebookUID_Flag: Int, nextFlag: NSArray, NextURLPath_Comments: String) {
+    var url_Comments: NSURL = NSURL(string: URLPath_Comments)
+    var URLRequest: NSURLRequest = NSURLRequest(URL: url_Comments)
+    var DataResponse: NSData = NSURLConnection.sendSynchronousRequest(URLRequest, returningResponse: nil, error: nil)
+    var JSONData_Comments = NSJSONSerialization.JSONObjectWithData(DataResponse, options: NSJSONReadingOptions.MutableContainers, error: nil) as NSDictionary
+    var FacebookUID_Comments = JSONData_Comments["data"].valueForKey("from") as NSArray
+    var storeUID_Comments: NSMutableString = ""
+    var FacebookUID_Flag = FacebookUID_Comments.count
+    var getNextFlag: NSDictionary
+    var nextFlag: NSArray = []
+    var NextURLPath_Comments: String = ""
+    var flag = 0
+    
+    for var i = 0; i < FacebookUID_Comments.count; ++i {
+        storeUID_Comments.appendFormat("%@\n", FacebookUID_Comments.objectAtIndex(i).valueForKey("id").stringByStandardizingPath)
+    }
+    
+    getNextFlag = JSONData_Comments["paging"] as NSDictionary
+    nextFlag = getNextFlag.allKeys
+    if nextFlag.count == 1 {
+        flag = 4
+    }else if nextFlag[0] as NSString == "cursors" && nextFlag[1] as NSString == "next" {
+        flag = 1
+    }else if nextFlag.count == 3 {
+        flag = 2
+    }else if nextFlag[0] as NSString == "cursors" && nextFlag[1] as NSString == "previous" {
+        flag = 3
+    }
+    
+    switch flag {
+    case 1:
+        NextURLPath_Comments = JSONData_Comments["paging"].valueForKey("next").stringByStandardizingPath
+    case 2:
+        NextURLPath_Comments = JSONData_Comments["paging"].valueForKey("next").stringByStandardizingPath
+    case 3:
+        break
+    case 4:
+        break
+    default:
+        break
+    }
+    
+    return (storeUID_Comments, FacebookUID_Flag, nextFlag, NextURLPath_Comments)
 }
 
 func SaveToFile(outputFile: NSMutableString) {
