@@ -10,7 +10,7 @@ func get_urlPath(PostID: String, AccessToken: String
     ) -> (urlPath_Likes: String, urlPath_SharedPosts: String, urlPath_Comments: String) {
     var urlPath_Likes = "https://graph.facebook.com/" + PostID + "/likes?limit=1000&access_token=" + AccessToken
     var urlPath_SharedPosts = "https://graph.facebook.com/" + PostID + "/sharedposts?limit=500&access_token=" + AccessToken
-    var urlPath_Comments = "https://graph.facebook.com/" + PostID + "/comments?limit=500&access_token=" + AccessToken
+    var urlPath_Comments = "https://graph.facebook.com/" + PostID + "/comments?limit=1000&access_token=" + AccessToken
     return (urlPath_Likes, urlPath_SharedPosts, urlPath_Comments)
 }
 
